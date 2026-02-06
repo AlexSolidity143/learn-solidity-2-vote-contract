@@ -10,9 +10,18 @@ contract Election {
 
     mapping(address => bool) public userVotes;
     mapping(uint256 => uint256) public votesCount;
+
     error YourAddressCantVote();
     error ElectorDoesNotExist(uint256 _pickedElector, uint256 _totalElectors);
     error OnlyForOwner();
+
+    event Voted(uint256 _index, address _userAddress);
+    event MaxVoteReseted();
+
+    modifier OnlyOwner() { //Perform before function
+        require(msg.sender == contractOwner, OnlyForOwner());
+        _;
+    }
 
     //["Alex","Kostya","Micke"]
 
@@ -22,24 +31,24 @@ contract Election {
         electionEndTime = block.timestamp + _electionTime;
         contractOwner = msg.sender;
     }
+
     function vote(uint256 _numberOfElector) public {
         require(userVotes[msg.sender] == false, YourAddressCantVote());
         require(_numberOfElector < electors.length, ElectorDoesNotExist(_numberOfElector, electors.length));
         require(votesCount[_numberOfElector] <= maxVotes - 1, "Max Votes");
         require(msg.sender != contractOwner, "Contract owner can't vote");
         require(block.timestamp < electionEndTime, "Voting is over");
+
         userVotes[msg.sender] = true;
         votesCount[_numberOfElector] += 1;
-    }
 
-    modifier OnlyOwner() { //Perform before function
-        require(msg.sender == contractOwner, OnlyForOwner());
-        _;
+        emit Voted(_numberOfElector, msg.sender);
     }
 
     function resetMaxVotes(uint256 _newMaxVotes) public OnlyOwner {
         require(_newMaxVotes > maxVotes, "Max votes can't decrease");
         maxVotes = _newMaxVotes;
+        emit MaxVoteReseted();
     }
 
     function resetElectionTime(uint256 _newElectionTime) public {
@@ -55,7 +64,6 @@ contract Election {
             }
         }
         return electors[leaderIndex];
-        
     }
 
 }
