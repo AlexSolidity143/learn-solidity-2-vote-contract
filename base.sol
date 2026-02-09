@@ -92,3 +92,31 @@ contract MathModifier {
     }
 
 }
+
+contract Store {
+    address public owner;
+    struct Product {
+        string name;
+        uint256 stock;
+        uint256 id;
+    }
+    Product[] public products;
+
+    /// @notice thrown when caller isn't an owner
+    error NotAnOwner();
+
+    modifier onlyOwner {
+        require(msg.sender == owner, NotAnOwner());
+        _;
+    }
+
+    constructor() {
+        owner = msg.sender;
+
+    }
+
+    function addProduct(string memory _name, uint256 _stock, uint256 _id) external onlyOwner {
+        products.push(Product(_name, _stock, _id));
+
+    }
+}
