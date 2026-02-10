@@ -1,6 +1,8 @@
 //SPDX-License-Identifier: MIT
 pragma solidity ^0.8.28;
 
+import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
+
 contract Election {
 
     string[] public electors;
@@ -93,8 +95,7 @@ contract MathModifier {
 
 }
 
-contract Store {
-    address public owner;
+contract Store is Ownable {
     struct Product {
         string name;
         uint256 stock;
@@ -102,21 +103,13 @@ contract Store {
     }
     Product[] public products;
 
-    /// @notice thrown when caller isn't an owner
-    error NotAnOwner();
-
-    modifier onlyOwner {
-        require(msg.sender == owner, NotAnOwner());
-        _;
-    }
-
-    constructor() {
-        owner = msg.sender;
-
-    }
+    constructor() Ownable(msg.sender) {}
 
     function addProduct(string memory _name, uint256 _stock, uint256 _id) external onlyOwner {
         products.push(Product(_name, _stock, _id));
+    }
 
+    function getTimestamp() public view onlyOwner returns(uint256) {
+        return block.timestamp;
     }
 }
