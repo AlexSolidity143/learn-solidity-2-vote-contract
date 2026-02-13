@@ -100,16 +100,31 @@ contract Store is Ownable {
         string name;
         uint256 stock;
         uint256 id;
+        uint256 price;
     }
     Product[] public products;
 
     constructor() Ownable(msg.sender) {}
 
-    function addProduct(string memory _name, uint256 _stock, uint256 _id) external onlyOwner {
-        products.push(Product(_name, _stock, _id));
+    function addProduct(string calldata _name, uint256 _stock, uint256 _id, uint256 _price) external onlyOwner {
+        products.push(Product(_name, _stock, _id, _price));
     }
 
     function getTimestamp() public view onlyOwner returns(uint256) {
         return block.timestamp;
+    }
+
+    function updatePrice(uint256 _id, uint256 _price) external onlyOwner {
+        Product storage thisProduct = findProduct(_id);
+        thisProduct.price = _price;
+    }
+
+    function findProduct(uint256 _id) internal view returns(Product storage product) {
+        for(uint256 i = 0; i < products.length; i++) {
+            if (products[i].id == _id) {
+                return products[i];
+            }
+        }
+        revert  ("Product nor found");
     }
 }
