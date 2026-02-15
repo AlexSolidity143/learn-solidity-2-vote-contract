@@ -11,6 +11,16 @@
 				"type": "constructor"
 			},
 			{
+				"inputs": [],
+				"name": "IdAlreadyExist",
+				"type": "error"
+			},
+			{
+				"inputs": [],
+				"name": "IdDoesNotExist",
+				"type": "error"
+			},
+			{
 				"inputs": [
 					{
 						"internalType": "address",
@@ -77,6 +87,57 @@
 				"name": "addProduct",
 				"outputs": [],
 				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "_id",
+						"type": "uint256"
+					}
+				],
+				"name": "deleteProduct",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "_id",
+						"type": "uint256"
+					}
+				],
+				"name": "getPrice",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "_id",
+						"type": "uint256"
+					}
+				],
+				"name": "getStock",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
 				"type": "function"
 			},
 			{
@@ -176,6 +237,24 @@
 				"outputs": [],
 				"stateMutability": "nonpayable",
 				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "_id",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "_stock",
+						"type": "uint256"
+					}
+				],
+				"name": "updateStock",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
 			}
 		],
 		"devdoc": {
@@ -244,11 +323,11 @@
 			]
 		},
 		"base.sol": {
-			"keccak256": "0x4045e57d0e754494a09e6fd9aeff2a8b8080f64a1200f234edc5d3db15b4b8c5",
+			"keccak256": "0x8fe9ee70a104b3dee9fa5b05f29b6145364f65fd63f7f855a3e2b71504cf85ff",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://82e1c3a1c7c26cddee74eaf150a1b275881fb37c741b5a7685b46a5fdf1c1da3",
-				"dweb:/ipfs/QmcKt2nPwbL35Mg22Jygkh2KTz2Mw9nYxeXSyhT6FUXnZq"
+				"bzz-raw://c2f8fd184a0f54e8813db43204cea2269334b6176ccca38a39b947fc9bbb4569",
+				"dweb:/ipfs/QmZ18v3bE5XnnwBUe2RY55qzHAJ6YnDpv2Au5b9pPyPevm"
 			]
 		}
 	},

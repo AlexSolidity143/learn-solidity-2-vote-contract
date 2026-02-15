@@ -104,10 +104,23 @@ contract Store is Ownable {
     }
     Product[] public products;
 
+    error IdAlreadyExist();
+    error IdDoesNotExist();
+
     constructor() Ownable(msg.sender) {}
 
     function addProduct(string calldata _name, uint256 _stock, uint256 _id, uint256 _price) external onlyOwner {
+        require(isIdExist(_id) == false, IdAlreadyExist());
         products.push(Product(_name, _stock, _id, _price));
+    }
+
+    function deleteProduct(uint256 _id) external onlyOwner {
+        (bool status, uint256 index) = findIndexById(_id);
+        require(status,IdDoesNotExist());
+
+        products[index] = products[products.length - 1];
+        products.pop();
+
     }
 
     function getTimestamp() public view onlyOwner returns(uint256) {
@@ -115,8 +128,23 @@ contract Store is Ownable {
     }
 
     function updatePrice(uint256 _id, uint256 _price) external onlyOwner {
-        Product storage thisProduct = findProduct(_id);
+        Product storage thisProduct = findProduct(_id); //don't rewrite
         thisProduct.price = _price;
+    }
+
+    function updateStock(uint256 _id, uint256 _stock) external onlyOwner {
+        Product storage thisProduct = findProduct(_id);
+        thisProduct.stock = _stock;
+    }
+
+    function getPrice(uint256 _id) public view returns(uint256) {
+        Product storage thisProduct = findProduct(_id);
+        return thisProduct.price;
+    }
+
+    function getStock(uint256 _id) public view returns(uint256) {
+        Product storage thisProduct = findProduct(_id);
+        return thisProduct.stock;
     }
 
     function findProduct(uint256 _id) internal view returns(Product storage product) {
@@ -125,6 +153,38 @@ contract Store is Ownable {
                 return products[i];
             }
         }
-        revert  ("Product nor found");
+        revert  ("Product not found");
+    }
+
+    function isIdExist(uint256 _id) internal view returns(bool) {
+        for(uint256 i = 0; i < products.length; i++) {
+            if (products[i].id == _id) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    function findIndexById(uint256 _id) internal view returns(bool, uint256) {
+        for(uint256 i = 0; i < products.length; i++) {
+            if (products[i].id == _id) {
+                return (true, i);
+            }
+        }
+        return (false, 0);
+    }
+}
+
+contract Links {
+    uint256[] public data = [0, 10, 555];
+
+    function modifyData() public {
+        uint256[] storage storageRef = data; //link of data, cheaper
+        storageRef[0] = 44;
+    }
+
+    function notModifyDatd() public view {
+        uint256[] memory storageRef = data; //new data in memory
+        storageRef[0] = 44;
     }
 }
