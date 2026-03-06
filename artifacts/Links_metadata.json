@@ -66,28 +66,12 @@
 		"remappings": []
 	},
 	"sources": {
-		"@openzeppelin/contracts/access/Ownable.sol": {
-			"keccak256": "0xff6d0bb2e285473e5311d9d3caacb525ae3538a80758c10649a4d61029b017bb",
-			"license": "MIT",
-			"urls": [
-				"bzz-raw://8ed324d3920bb545059d66ab97d43e43ee85fd3bd52e03e401f020afb0b120f6",
-				"dweb:/ipfs/QmfEckWLmZkDDcoWrkEvMWhms66xwTLff9DDhegYpvHo1a"
-			]
-		},
-		"@openzeppelin/contracts/utils/Context.sol": {
-			"keccak256": "0x493033a8d1b176a037b2cc6a04dad01a5c157722049bbecf632ca876224dd4b2",
-			"license": "MIT",
-			"urls": [
-				"bzz-raw://6a708e8a5bdb1011c2c381c9a5cfd8a9a956d7d0a9dc1bd8bcdaf52f76ef2f12",
-				"dweb:/ipfs/Qmax9WHBnVsZP46ZxEMNRQpLQnrdE4dK8LehML1Py8FowF"
-			]
-		},
 		"base.sol": {
-			"keccak256": "0x1bfadf9e8654820c77e05617cb7fcb7e334cc3dc4009ba97ca15e1c95601181c",
+			"keccak256": "0x904ae21760b191f7f1f28e954a8576f6a7218363f34551882141a5dbb7004c56",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://d5c93f56d155fa29d037b62de965398141ca19adf9004a3127900c07f0f88ab2",
-				"dweb:/ipfs/QmWvv5T1VuZJS6EgaHzWb6SJAWJdAcSs9CbrnbtucYY6EB"
+				"bzz-raw://e7a1436be7189213fec0134f3dfd90cc0c4b06d2888aac17dc57b341865fc65c",
+				"dweb:/ipfs/QmbPJAAqAhgX5EFYyK6oZJ7drWdELD7LxJPmMcPjc7keGw"
 			]
 		}
 	},

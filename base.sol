@@ -1,8 +1,6 @@
 //SPDX-License-Identifier: MIT
 pragma solidity ^0.8.28;
 
-import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
-
 contract Election {
 
     string[] public electors;
@@ -93,126 +91,6 @@ contract MathModifier {
         x = _x * 100;
     }
 
-}
-
-contract Store is Ownable {
-    /// @notice buyer =>  product_id => quantity
-    mapping(address => mapping(uint256 => uint256)) public purchase;
-
-    struct Product {
-        string name;
-        uint256 stock;
-        uint256 id;
-        uint256 price;
-    }
-    Product[] private products;
-
-    event Purchase(address buyer, uint256 id, uint256 quantity);
-
-    error IdAlreadyExist();
-    error IdDoesNotExist();
-    error OutOfStock();
-    error NotEnoughtFunds();
-    error QuantityCantBeZero();
-
-    constructor() Ownable(msg.sender) {}
-
-    function buy(uint256 _id, uint256 _quantity) payable external {
-        require(_quantity > 0, QuantityCantBeZero());
-        require(getStock(_id) >= _quantity, OutOfStock());
-        uint256 totalPrice = getPrice(_id) * _quantity;
-        require(msg.value >= totalPrice, NotEnoughtFunds());
-
-        ///buy
-        buyProcess(msg.sender, _id, _quantity);
-
-        if (msg.value > totalPrice) {
-            payable(msg.sender).transfer(msg.value - totalPrice); 
-        }
-    }
-
-    function buyProcess(address _buyer, uint256 _id, uint256 _quantity) internal {
-        Product storage product = findProduct(_id);
-        product.stock -= _quantity;
-        purchase[_buyer][_id] +=  _quantity;
-
-        emit Purchase(_buyer, _id, _quantity);
-    }
-
-    function withdraw() external onlyOwner {
-        uint256 balance = address(this).balance;
-        require(balance > 0, "Not enought money");
-        payable(owner()).transfer(balance); 
-    }
-
-    function addProduct(string calldata _name, uint256 _stock, uint256 _id, uint256 _price) external onlyOwner {
-        require(isIdExist(_id) == false, IdAlreadyExist());
-        products.push(Product(_name, _stock, _id, _price));
-    }
-
-    function deleteProduct(uint256 _id) external onlyOwner {
-        (bool status, uint256 index) = findIndexById(_id);
-        require(status,IdDoesNotExist());
-
-        products[index] = products[products.length - 1];
-        products.pop();
-
-    }
-
-    function getTimestamp() public view onlyOwner returns(uint256) {
-        return block.timestamp;
-    }
-
-    function updatePrice(uint256 _id, uint256 _price) external onlyOwner {
-        Product storage thisProduct = findProduct(_id); //don't rewrite
-        thisProduct.price = _price;
-    }
-
-    function updateStock(uint256 _id, uint256 _stock) external onlyOwner {
-        Product storage thisProduct = findProduct(_id);
-        thisProduct.stock = _stock;
-    }
-
-    function getProducts() public view returns(Product[] memory) {
-         return products;
-    }
-
-    function getPrice(uint256 _id) public view returns(uint256) {
-        Product storage thisProduct = findProduct(_id);
-        return thisProduct.price;
-    }
-
-    function getStock(uint256 _id) public view returns(uint256) {
-        Product storage thisProduct = findProduct(_id);
-        return thisProduct.stock;
-    }
-
-    function findProduct(uint256 _id) internal view returns(Product storage product) {
-        for(uint256 i = 0; i < products.length; i++) {
-            if (products[i].id == _id) {
-                return products[i];
-            }
-        }
-        revert  IdDoesNotExist();
-    }
-
-    function isIdExist(uint256 _id) internal view returns(bool) {
-        for(uint256 i = 0; i < products.length; i++) {
-            if (products[i].id == _id) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    function findIndexById(uint256 _id) internal view returns(bool, uint256) {
-        for(uint256 i = 0; i < products.length; i++) {
-            if (products[i].id == _id) {
-                return (true, i);
-            }
-        }
-        return (false, 0);
-    }
 }
 
 contract Links {
